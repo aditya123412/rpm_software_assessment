@@ -7,14 +7,11 @@ using JsonFlatFileDataStore;
 
 namespace assessment_platform_developer.Models
 {
+    //This is a substitute to connecting to an external database to make it portable and still persistent
     public class LocalDb
     {
         JsonFlatFileDataStore.DataStore store;
         public LocalDb(string path) {
-            //if (!File.Exists(path))
-            //{
-            //    File.Create(path);
-            //}
             store = new DataStore(path);
         }
 

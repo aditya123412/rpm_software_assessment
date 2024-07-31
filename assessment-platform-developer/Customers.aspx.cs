@@ -202,24 +202,28 @@ namespace assessment_platform_developer
             {
                 var customerId = CustomersDDL.SelectedItem.Value;
                 var customer = customerService.GetCustomer(int.Parse(customerId));
-
-                CustomerName.Text = customer.Name;
-                CustomerAddress.Text = customer.Address;
-                CustomerEmail.Text = customer.Email;
-                CustomerPhone.Text = customer.Phone;
-                CustomerCity.Text = customer.City;
-                CountryDropDownList.SelectedValue = customer.Country;
-                UpdateLocaleOptions();
-                StateDropDownList.SelectedValue = customer.State;
-                CustomerZip.Text = customer.Zip;
-                CustomerNotes.Text = customer.Notes;
-                ContactName.Text = customer.ContactName;
-                ContactPhone.Text = customer.ContactPhone;
-                ContactEmail.Text = customer.ContactEmail;
-                AddButton.Text = $"Update:{customer.Name}";
+                SetPageCustomer(customer);
 
                 DeleteButton.Visible = true;
             }
+        }
+
+        private void SetPageCustomer(Customer customer)
+        {
+            CustomerName.Text = customer.Name;
+            CustomerAddress.Text = customer.Address;
+            CustomerEmail.Text = customer.Email;
+            CustomerPhone.Text = customer.Phone;
+            CustomerCity.Text = customer.City;
+            CountryDropDownList.SelectedValue = customer.Country;
+            UpdateLocaleOptions();
+            StateDropDownList.SelectedValue = customer.State;
+            CustomerZip.Text = customer.Zip;
+            CustomerNotes.Text = customer.Notes;
+            ContactName.Text = customer.ContactName;
+            ContactPhone.Text = customer.ContactPhone;
+            ContactEmail.Text = customer.ContactEmail;
+            AddButton.Text = $"Update:{customer.Name}";
         }
     }
 

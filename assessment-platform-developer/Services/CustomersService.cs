@@ -21,9 +21,9 @@ namespace assessment_platform_developer.Services
 		private readonly ICustomerCommandRepository customerRepository;
 		private readonly ICustomerQueryRepository customerQueryRepository;
 
-        public CustomerService(ICustomerCommandRepository customerRepository, ICustomerQueryRepository customerQueryRepository)
+        public CustomerService(ICustomerCommandRepository customerCommandRepository, ICustomerQueryRepository customerQueryRepository)
 		{
-			this.customerRepository = customerRepository;
+			this.customerRepository = customerCommandRepository;
 			this.customerQueryRepository = customerQueryRepository;
         }
 

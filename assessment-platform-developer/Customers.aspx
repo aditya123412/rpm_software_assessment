@@ -75,6 +75,7 @@
 							<div class="form-group">
 								<asp:Label ID="CustomerNameLabel" runat="server" Text="Name" CssClass="form-label"></asp:Label>
 								<asp:RequiredFieldValidator ID="RequiredCustomerNameValidator" runat="server" ControlToValidate="CustomerNotes" ErrorMessage="Name is a required field." ForeColor="#FF3300"></asp:RequiredFieldValidator>
+								<asp:RegularExpressionValidator ID="RegularExpressionValidator2" runat="server" ControlToValidate="CustomerName" ErrorMessage="Make sure that the name field only contains valid characters." ForeColor="Red" ValidationExpression="^[a-zA-Z](?:[a-zA-Z.,'_ -]*[a-zA-Z])?$"></asp:RegularExpressionValidator>
 								<asp:TextBox ID="CustomerName" runat="server" CssClass="form-control"></asp:TextBox>
 							</div>
 
@@ -132,6 +133,7 @@
 							<div class="form-group">
 								<asp:Label ID="ContactNameLabel" runat="server" Text="Name" CssClass="form-label"></asp:Label>
 								<asp:RequiredFieldValidator ID="RequiredContactNameValidator" runat="server" ControlToValidate="ContactName" ErrorMessage="Name is a required field." ForeColor="#FF3300"></asp:RequiredFieldValidator>
+								<asp:RegularExpressionValidator ID="RegularExpressionValidator1" runat="server" ControlToValidate="ContactName" ErrorMessage="Make sure that the name field only contains valid characters." ForeColor="Red" ValidationExpression="^[a-zA-Z](?:[a-zA-Z.,'_ -]*[a-zA-Z])?$"></asp:RegularExpressionValidator>
 								<asp:TextBox ID="ContactName" runat="server" CssClass="form-control"></asp:TextBox>
 							</div>
 
