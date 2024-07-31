@@ -6,7 +6,7 @@
 <head runat="server">
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-	<title><%: Page.Title %> RPM Platform Developer Assessment</title>
+	<title><%: Page.Title %>RPM Platform Developer Assessment</title>
 
 	<asp:PlaceHolder runat="server">
 		<%: Scripts.Render("~/bundles/modernizr") %>
@@ -74,42 +74,52 @@
 							<h1>Add customer</h1>
 							<div class="form-group">
 								<asp:Label ID="CustomerNameLabel" runat="server" Text="Name" CssClass="form-label"></asp:Label>
+								<asp:RequiredFieldValidator ID="RequiredCustomerNameValidator" runat="server" ControlToValidate="CustomerNotes" ErrorMessage="Name is a required field." ForeColor="#FF3300"></asp:RequiredFieldValidator>
 								<asp:TextBox ID="CustomerName" runat="server" CssClass="form-control"></asp:TextBox>
 							</div>
 
 							<div class="form-group">
 								<asp:Label ID="CustomerAddressLabel" runat="server" Text="Address" CssClass="form-label"></asp:Label>
+								<asp:RequiredFieldValidator ID="RequiredAddressValidator" runat="server" ControlToValidate="CustomerAddress" ErrorMessage="Address is a required field." ForeColor="#FF3300"></asp:RequiredFieldValidator>
 								<asp:TextBox ID="CustomerAddress" runat="server" CssClass="form-control"></asp:TextBox>
 							</div>
 
 							<div class="form-group">
 								<asp:Label ID="CustomerEmailLabel" runat="server" Text="Email" CssClass="form-label"></asp:Label>
+								<asp:RequiredFieldValidator ID="RequiredCustomerEmailValidator" runat="server" ControlToValidate="CustomerEmail" ErrorMessage="Email is a required field." ForeColor="#FF3300"></asp:RequiredFieldValidator>
+                                <asp:RegularExpressionValidator ID="CustomerEmailRegularExpressionValidator" runat="server" ControlToValidate="CustomerEmail" ErrorMessage="Please check the email format" ForeColor="#FF3300" ValidationExpression="^([\w\.\-]+)@([\w\-]+)((\.(\w){2,})+)$"></asp:RegularExpressionValidator>
 								<asp:TextBox ID="CustomerEmail" runat="server" CssClass="form-control"></asp:TextBox>
 							</div>
 
 							<div class="form-group">
 								<asp:Label ID="CustomerPhoneLabel" runat="server" Text="Phone" CssClass="form-label"></asp:Label>
+								<asp:RequiredFieldValidator ID="RequiredCustomerPhoneValidator" runat="server" ControlToValidate="CustomerPhone" ErrorMessage="Phone number is a required field." ForeColor="#FF3300"></asp:RequiredFieldValidator>
+                                <asp:RegularExpressionValidator ID="CustomerPhoneRegularExpressionValidator" runat="server" ControlToValidate="CustomerPhone" ErrorMessage="Please check the phone number format." ForeColor="#FF3300" ValidationExpression="^(\+0?1\s?)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}$"></asp:RegularExpressionValidator>
 								<asp:TextBox ID="CustomerPhone" runat="server" CssClass="form-control"></asp:TextBox>
 							</div>
 
 							<div class="form-group">
 								<asp:Label ID="CustomerCityLabel" runat="server" Text="City" CssClass="form-label"></asp:Label>
+								<asp:RequiredFieldValidator ID="RequiredCityValidator" runat="server" ControlToValidate="CustomerCity" ErrorMessage="City is a required field." ForeColor="#FF3300"></asp:RequiredFieldValidator>
 								<asp:TextBox ID="CustomerCity" runat="server" CssClass="form-control"></asp:TextBox>
 							</div>
 
 							<div class="form-group">
 								<asp:Label ID="CustomerStateLabel" runat="server" Text="Province/State" CssClass="form-label"></asp:Label>
+								<asp:RequiredFieldValidator ID="RequiredProvinceValidator" runat="server" ControlToValidate="StateDropDownList" ErrorMessage="State/Province is a required field." ForeColor="#FF3300"></asp:RequiredFieldValidator>
 								<asp:DropDownList ID="StateDropDownList" runat="server" CssClass="form-control"/>
 							</div>
 
 							<div class="form-group">
 								<asp:Label ID="CustomerZipLabel" runat="server" Text="Postal/Zip Code" CssClass="form-label"></asp:Label>
+								<asp:RequiredFieldValidator ID="RequiredCustomerZipCodeValidator" runat="server" ControlToValidate="CustomerZip" ErrorMessage="Zipcode is a required field." ForeColor="#FF3300"></asp:RequiredFieldValidator>
+                                <asp:RegularExpressionValidator ID="ZipCodeRegularExpressionValidator" runat="server" ControlToValidate="CustomerZip" ErrorMessage="Check the zipcode format and verify that it matches the selected country's format." ForeColor="#FF3300"></asp:RegularExpressionValidator>
 								<asp:TextBox ID="CustomerZip" runat="server" CssClass="form-control"></asp:TextBox>
 							</div>
 
 							<div class="form-group">
 								<asp:Label ID="CustomerCountryLabel" runat="server" Text="Country" CssClass="form-label"></asp:Label>
-								<asp:DropDownList ID="CountryDropDownList" runat="server" CssClass="form-control"/>
+								<asp:DropDownList AutoPostBack="true" ID="CountryDropDownList" runat="server" CssClass="form-control" OnSelectedIndexChanged="CountryListChanged"/>
 							</div>
 
 							<div class="form-group">
@@ -121,16 +131,21 @@
 
 							<div class="form-group">
 								<asp:Label ID="ContactNameLabel" runat="server" Text="Name" CssClass="form-label"></asp:Label>
+								<asp:RequiredFieldValidator ID="RequiredContactNameValidator" runat="server" ControlToValidate="ContactName" ErrorMessage="Name is a required field." ForeColor="#FF3300"></asp:RequiredFieldValidator>
 								<asp:TextBox ID="ContactName" runat="server" CssClass="form-control"></asp:TextBox>
 							</div>
 
 							<div class="form-group">
 								<asp:Label ID="ContactEmailLabel" runat="server" Text="Email" CssClass="form-label"></asp:Label>
+								<asp:RequiredFieldValidator ID="RequiredContactEmailValidator" runat="server" ControlToValidate="ContactEmail" ErrorMessage="Email is a required field." ForeColor="#FF3300"></asp:RequiredFieldValidator>
+                                <asp:RegularExpressionValidator ID="ContactEmailRegularExpressionValidator" runat="server" ControlToValidate="ContactEmail" ErrorMessage="Please check the email address format." ForeColor="#FF3300" ValidationExpression="^([\w\.\-]+)@([\w\-]+)((\.(\w){2,})+)$"></asp:RegularExpressionValidator>
 								<asp:TextBox ID="ContactEmail" runat="server" CssClass="form-control"></asp:TextBox>
 							</div>
 
 							<div class="form-group">
 								<asp:Label ID="ContactPhoneLabel" class="col-form-label" runat="server" Text="Phone" CssClass="form-label"></asp:Label>
+								<asp:RequiredFieldValidator ID="RequiredContactPhoneValidator" runat="server" ControlToValidate="ContactPhone" ErrorMessage="Phone number is a required field." ForeColor="#FF3300"></asp:RequiredFieldValidator>
+                                <asp:RegularExpressionValidator ID="ContactPhoneRegularExpressionValidator" runat="server" ControlToValidate="ContactPhone" ErrorMessage="Please check the phone number format" ForeColor="#FF3300" ValidationExpression="^(\+0?1\s?)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}$"></asp:RegularExpressionValidator>
 								<asp:TextBox ID="ContactPhone" runat="server" CssClass="form-control"></asp:TextBox>
 							</div>
 
