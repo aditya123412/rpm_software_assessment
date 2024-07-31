@@ -151,6 +151,7 @@
 
 							<div class="form-group">
 								<asp:Button ID="AddButton" class="btn btn-primary btn-md" runat="server" Text="Add" OnClick="AddButton_Click" />
+								<asp:Button ID="DeleteButton" class="btn btn-primary btn-md" runat="server" Text="Delete" OnClick="DeleteButton_Click" />
 							</div>
 						</div>
 					</div>
