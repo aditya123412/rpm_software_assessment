@@ -12,29 +12,30 @@ namespace assessment_platform_developer
 {
     public partial class Customers : Page
     {
+        private const string AddNewUserItemId = "new-user";
         private static List<Customer> customers = new List<Customer>();
+        private ICustomerService customerService;
 
         protected void Page_Load(object sender, EventArgs e)
         {
+            var testContainer = (Container)HttpContext.Current.Application["DIContainer"];
+            customerService = testContainer.GetInstance<ICustomerService>();
             if (!IsPostBack)
             {
-                var testContainer = (Container)HttpContext.Current.Application["DIContainer"];
-                var customerService = testContainer.GetInstance<ICustomerService>();
 
-                var allCustomers = customerService.GetAllCustomers();
-                ViewState["Customers"] = allCustomers;
-                PopulateCustomerDropDownLists();
-                SetLocaleOptions();
+                customers = customerService.GetAllCustomers().ToList();
+                ViewState["Customers"] = customers;
+                PopulateCustomerPageDropDownLists();
+                PopulateCustomerDropDownListBox();
+                UpdateLocaleOptions();
             }
             else
             {
                 customers = (List<Customer>)ViewState["Customers"];
             }
-
-            PopulateCustomerListBox();
         }
 
-        private void PopulateCustomerDropDownLists()
+        private void PopulateCustomerPageDropDownLists()
         {
 
             var countryList = Enum.GetValues(typeof(Countries))
@@ -50,18 +51,18 @@ namespace assessment_platform_developer
             CountryDropDownList.SelectedValue = ((int)Countries.Canada).ToString();
         }
 
-        protected void PopulateCustomerListBox()
+        protected void PopulateCustomerDropDownListBox()
         {
             CustomersDDL.Items.Clear();
-            var storedCustomers = customers.Select(c => new ListItem(c.Name)).ToArray();
+            var storedCustomers = customers.Select(c => new ListItem(c.Name, c.ID.ToString())).ToArray();
+            CustomersDDL.Items.Add(new ListItem("Add new customer", AddNewUserItemId));
+
             if (storedCustomers.Length != 0)
             {
                 CustomersDDL.Items.AddRange(storedCustomers);
-                CustomersDDL.SelectedIndex = 0;
-                return;
+                CustomersDDL.SelectedValue = AddNewUserItemId;
             }
 
-            CustomersDDL.Items.Add(new ListItem("Add new customer"));
         }
 
         protected void AddButton_Click(object sender, EventArgs e)
@@ -79,35 +80,76 @@ namespace assessment_platform_developer
                 Notes = CustomerNotes.Text,
                 ContactName = ContactName.Text,
                 ContactPhone = ContactPhone.Text,
-                ContactEmail = ContactEmail.Text
+                ContactEmail = ContactEmail.Text,
+                ID = CustomersDDL.SelectedItem.Value.Equals(AddNewUserItemId) ? 0 : int.Parse(CustomersDDL.SelectedItem.Value),
             };
 
-            var testContainer = (Container)HttpContext.Current.Application["DIContainer"];
-            var customerService = testContainer.GetInstance<ICustomerService>();
-            customerService.AddCustomer(customer);
-            customers.Add(customer);
+            if (CustomersDDL.SelectedItem.Value.Equals(AddNewUserItemId))
+            {
+                customerService.AddCustomer(customer);
+                customers.Add(customer);
 
-            CustomersDDL.Items.Add(new ListItem(customer.Name));
+                CustomersDDL.Items.Add(new ListItem(customer.Name));
+            }
+            else
+            {
+                customerService.UpdateCustomer(customer);
+            }
 
+            ClearFormInputs();
+        }
+
+        private void ClearFormInputs()
+        {
             CustomerName.Text = string.Empty;
             CustomerAddress.Text = string.Empty;
             CustomerEmail.Text = string.Empty;
             CustomerPhone.Text = string.Empty;
             CustomerCity.Text = string.Empty;
+            CountryDropDownList.SelectedIndex = 0;
+            UpdateLocaleOptions();
             StateDropDownList.SelectedIndex = 0;
             CustomerZip.Text = string.Empty;
-            CountryDropDownList.SelectedIndex = 0;
             CustomerNotes.Text = string.Empty;
             ContactName.Text = string.Empty;
             ContactPhone.Text = string.Empty;
             ContactEmail.Text = string.Empty;
         }
+
         protected void CountryListChanged(Object obj, EventArgs e)
         {
-            SetLocaleOptions(true);
+            UpdateLocaleOptions(true);
         }
+        protected void CustomerListChanged(Object obj, EventArgs e)
+        {
+            if (CustomersDDL.SelectedItem.Value.Equals(AddNewUserItemId))
+            {
+                //Clear the form if new user is being added
+                ClearFormInputs();
+                AddButton.Text = "Add";
+            }
+            else
+            {
+                var customerId = CustomersDDL.SelectedItem.Value;
+                var customer = customerService.GetCustomer(int.Parse(customerId));
 
-        private void SetLocaleOptions(bool triggerValidation = false)
+                CustomerName.Text = customer.Name;
+                CustomerAddress.Text = customer.Address;
+                CustomerEmail.Text = customer.Email;
+                CustomerPhone.Text = customer.Phone;
+                CustomerCity.Text = customer.City;
+                CountryDropDownList.SelectedValue = customer.Country;
+                UpdateLocaleOptions();
+                StateDropDownList.SelectedValue = customer.State;
+                CustomerZip.Text = customer.Zip;
+                CustomerNotes.Text = customer.Notes;
+                ContactName.Text = customer.ContactName;
+                ContactPhone.Text = customer.ContactPhone;
+                ContactEmail.Text = customer.ContactEmail;
+                AddButton.Text = $"Update:{customer.Name}";
+            }
+        }
+        private void UpdateLocaleOptions(bool triggerValidation = false)
         {
             var _usZipRegEx = @"^\d{5}(?:[-\s]\d{4})?$";
             var _caZipRegEx = @"^([ABCEGHJKLMNPRSTVXY]\d[ABCEGHJKLMNPRSTVWXYZ])\ {0,1}(\d[ABCEGHJKLMNPRSTVWXYZ]\d)$";

@@ -60,7 +60,7 @@
 	<div>
 		<div class="container body-content">
 			<h2>Customer Registry</h2>
-			<asp:DropDownList runat="server" ID="CustomersDDL" CssClass="form-control"/>
+			<asp:DropDownList runat="server" ID="CustomersDDL" CssClass="form-control" AutoPostBack="True" OnSelectedIndexChanged="CustomerListChanged"/>
 		</div>
 
 		<div class="container body-content">

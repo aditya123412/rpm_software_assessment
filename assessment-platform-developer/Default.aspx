@@ -23,5 +23,6 @@
                 </p>
             </section>
     </main>
+    <a href="/Customers"><h3>Navigate to solution</h3></a>
 
 </asp:Content>
